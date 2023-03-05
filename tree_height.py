@@ -2,22 +2,22 @@ import os
 
 def inputs():
     while True:
-        method = input("(F for file, K for keyboard): ")
+        method = input("(F for file, I for keyboard): ")
         if method.upper() == "F":
             filename = input("Enter filename: ")
             if "a" in filename:
-                print("Invalid filename.")
+                continue
             elif os.path.exists(f"inputs/{filename}"):
                 with open(f"inputs/{filename}", "r") as f:
                     return f.read().strip().split("\n")[1:]
             else:
-                print("File not found. ")
-        elif method.upper() == "K":
-            n = int(input("Enter number of nodes: "))
-            vec = list(map(int, input("Enter parents of nodes: ").split()))
+                continue
+        elif method.upper() == "I":
+            n = int(input())
+            vec = list(map(int, input().split()))
             return n, vec
         else:
-            print("Invalid input method. ")
+            continue
 
 def heights(n, vec):
     uz = [[] for i in range(n)]
