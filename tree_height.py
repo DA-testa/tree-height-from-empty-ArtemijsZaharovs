@@ -1,41 +1,42 @@
-import os
+import sys
+import sys
+import numpy
 
-def inputs():
-    while True:
-        method = input("(F for file, I for keyboard): ")
-        if method.upper() == "F":
-            filename = input("Enter filename: ")
-            if "a" in filename:
-                continue
-            elif os.path.exists(f"inputs/{filename}"):
-                with open(f"inputs/{filename}", "r") as f:
-                    return f.read().strip().split("\n")[1:]
-            else:
-                continue
-        elif method.upper() == "I":
-            n = int(input())
-            vec = list(map(int, input().split()))
-            return n, vec
-        else:
-            continue
-
-def heights(n, vec):
-    uz = [[] for i in range(n)]
+def heights(n, vecs):
+    possible_heights = [0 for i in range(n)]
+    max_height = 0
     for i in range(n):
-        if vec[i] == -1:
-            r = i
-        else:
-            uz[vec[i]].append(i)
-    aug = 0
-    q = [(r, 1)]
-    while q:
-        node, level = q.pop(0)
-        aug = max(aug, level)
-        for ber in uz[node]:
-            q.append((ber, level + 1))
-    return aug
+        height = 0
+        p = i
+        while not (int(vecs[p]) == -1):
+            if (possible_heights[p] != 0):
+                height += possible_heights[p] 
+                break
+            height += 1
+            p = int(vecs[p])
+        possible_heights[i] = height
+        max_height = max(max_height, possible_heights[i])
+    return max_height + 1
+
+def main():
+    command = input()
+    if "F" in command:
+        file_name = input()
+        path = "test/" + file_name
+        if not "a" in file_name:
+            with open(path, "r") as f:
+                text = f.read()
+            partitioned = text.partition("\n")
+            n = int(partitioned[0])
+            r = partitioned[2].split(" ")
+            r = numpy.array(r)
+            print(heights(n, r))
+    elif "I" in command:
+        n = int(input())
+        vecs = input()
+        r = vecs.split(" ")
+        r = numpy.array(r)
+        print(heights(n, r))
 
 if __name__ == "__main__":
-    n, vec = inputs()
-    aug = heights(n, vec)
-    print(aug)
+    main()
