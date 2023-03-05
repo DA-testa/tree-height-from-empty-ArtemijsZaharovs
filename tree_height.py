@@ -1,27 +1,21 @@
 # python3
-def heights(k, vec ):
-    kok = [[] for _ in range(k)]
-    for ber, vect in enumerate(vec):
-        if vect == -1:
-            r = ber
-        else:
-            kok[vect].append(ber)
+def depth(uz, vec):
+    if vec[uz] == -1:
+        return 1
+    else:
+        return 1 + depth(vec[uz], vec)
 
-   
-    def height(uz, x):
-     
-        if x[uz]:
-            return x[uz]
-        
-        if not kok[uz]:
-            x[uz] = 1
-            return 1
- x[node] = max(height(ber, x) for ber in kok[uz]) + 1
-        return x[node]
+def heights(k, vec):
+    height = 0
+    for i in range(k):
+        height = max(height, depth(i, vec))
+    return height
 
-    x = [0] * k
-    return height(r, x)
+k = int(input())
+vec = list(map(int, input().split()))
 
-k = 5
-vec = [4, -1, 4, 1, 1]
-print(heights(k, vec))  
+print(heights(k, vec))
+
+
+
+
