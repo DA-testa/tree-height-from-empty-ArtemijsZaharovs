@@ -1,5 +1,5 @@
 # python3
-def height(k, vec ):
+def heights(k, vec ):
     kok = [[] for _ in range(k)]
     for ber, vect in enumerate(vec):
         if vect == -1:
@@ -24,4 +24,4 @@ def height(k, vec ):
 
 k = 5
 vec = [4, -1, 4, 1, 1]
-print(height(k, vec))  
+print(heights(k, vec))  
