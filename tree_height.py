@@ -2,41 +2,30 @@ import sys
 import sys
 import numpy
 
-def heights(n, vecs):
-    possible_heights = [0 for i in range(n)]
-    max_height = 0
+def max_chain_length(n, arr):
+    chains = [0] * n
     for i in range(n):
-        height = 0
-        p = i
-        while not (int(vecs[p]) == -1):
-            if (possible_heights[p] != 0):
-                height += possible_heights[p] 
-                break
-            height += 1
-            p = int(vecs[p])
-        possible_heights[i] = height
-        max_height = max(max_height, possible_heights[i])
-    return max_height + 1
+        if arr[i] == -1:
+            chains[i] = 1
+        elif chains[arr[i]] == 0:
+            chains[i] = max_chain_length(n, arr[arr[i]:]) + 1
+        else:
+            chains[i] = chains[arr[i]] + 1
+    return max(chains)
 
 def main():
-    command = input()
-    if "F" in command:
-        file_name = input()
-        path = "test/" + file_name
-        if not "a" in file_name:
-            with open(path, "r") as f:
-                text = f.read()
-            partitioned = text.partition("\n")
-            n = int(partitioned[0])
-            r = partitioned[2].split(" ")
-            r = numpy.array(r)
-            print(heights(n, r))
-    elif "I" in command:
+    command = input().strip()
+    if command == "I":
         n = int(input())
-        vecs = input()
-        r = vecs.split(" ")
-        r = numpy.array(r)
-        print(heights(n, r))
+        arr = [int(x) for x in input().split()]
+        print(max_chain_length(n, arr))
+    elif command == "F":
+        file_name = input().strip()
+        if "a" not in file_name:
+            with open("test/" + file_name) as f:
+                n = int(f.readline().strip())
+                arr = [int(x) for x in f.readline().split()]
+                print(max_chain_length(n, arr))
 
 if __name__ == "__main__":
     main()
