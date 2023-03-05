@@ -1,43 +1,41 @@
-class TreeNode:
-    def __init__(self, num):
-        self.num = num
-        self.children = []
-        self.depth = None
+import os
 
-def depths(n, vecs):
-    uz = [TreeNode(i) for i in range(n)]
-    r = None
-
-    for i, p in enumerate(vecs):
-        if p == -1:
-            r = uz[i]
+def inputs():
+    while True:
+        method = input("(F for file, I for keyboard): ")
+        if method.upper() == "F":
+            filename = input("Enter filename: ")
+            if "a" in filename:
+                print("Invalid filename.")
+            elif os.path.exists(f"inputs/{filename}"):
+                with open(f"inputs/{filename}", "r") as f:
+                    return f.read().strip().split("\n")[1:]
+            else:
+                print("File not found. ")
+        elif method.upper() == "I":
+            n = int(input("Enter  "))
+            vec = list(map(int, input("Enter  ").split()))
+            return n, vec
         else:
-            uz[p].children.append(uz[i])
+            print("Invalid input method. ")
 
-    if r is None:
-        return 0
+def heights(n, vec):
+    uz = [[] for i in range(n)]
+    for i in range(n):
+        if vec[i] == -1:
+            r = i
+        else:
+            uz[vec[i]].append(i)
+    aug = 0
+    q = [(r, 1)]
+    while q:
+        node, level = q.pop(0)
+        aug = max(aug, level)
+        for ber in uz[node]:
+            q.append((ber, level + 1))
+    return aug
 
-    cx = [(r, 0)]  # start from depth 0
-    max_depth = 0
-    while cx:
-        node, depth = cx.pop()
-        node.depth = depth
-        max_depth = max(max_depth, depth)
-        for child in node.children:
-            cx.append((child, depth + 1))
-
-    return max_depth + 1  # add 1 to get the depth of the tree
-
-def parse_input(input_string):
-    input_lines = input_string.strip().split("\n")
-    n = int(input_lines[0])
-    vecs = list(map(int, input_lines[1].split()))
-    return n, vecs
-
-def solve(input_string):
-    n, vecs = parse_input(input_string)
-    return str(depths(n, vecs))
-
-# example usage:
-input_string = '5\n4 -1 4 1 1\n'
-print(solve(input_string))
+if __name__ == "__main__":
+    n, vec = inputs()
+    aug = heights(n, vec)
+    print(aug)
