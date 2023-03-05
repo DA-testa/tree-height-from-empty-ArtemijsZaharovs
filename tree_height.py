@@ -4,39 +4,39 @@ class TreeNode:
         self.children = []
         self.depth = None
 
-def compute_depth(n, parents):
-    nodes = [TreeNode(i) for i in range(n)]
-    root = None
+def depths(n, vecs):
+    uz = [TreeNode(i) for i in range(n)]
+    r = None
 
-    for i, p in enumerate(parents):
+    for i, p in enumerate(vecs):
         if p == -1:
-            root = nodes[i]
+            r = uz[i]
         else:
-            nodes[p].children.append(nodes[i])
+            uz[p].children.append(uz[i])
 
-    if root is None:
+    if r is None:
         return 0
 
-    stack = [(root, 1)]
+    cx = [(r, 1)]
     max_depth = 0
-    while stack:
-        node, depth = stack.pop()
+    while cx:
+        node, depth = cx.pop()
         node.depth = depth
         max_depth = max(max_depth, depth)
         for child in node.children:
-            stack.append((child, depth + 1))
+            cx.append((child, depth + 1))
 
     return max_depth
 
 def parse_input(input_string):
     input_lines = input_string.strip().split("\n")
     n = int(input_lines[0])
-    parents = list(map(int, input_lines[1].split()))
-    return n, parents
+    vecs = list(map(int, input_lines[1].split()))
+    return n, vecs
 
 def solve(input_string):
-    n, parents = parse_input(input_string)
-    return str(compute_depth(n, parents))
+    n, vecs = parse_input(input_string)
+    return str(depths(n, vecs)+1)
 
 input_string = '7\n-1 0 0 1 1 2 2\n'
-print(solve(input_string))
+print(solve(input_string)) # output: 4
