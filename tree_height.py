@@ -1,47 +1,42 @@
-import sys
-
-class Node:
-    def __init__(self, n):
-        self.n = n
+class TreeNode:
+    def __init__(self, num):
+        self.num = num
         self.children = []
-        self.height = None
+        self.depth = None
 
-def compute_height(n, parents):
-    uzs = [uz(i) for i in range(n)]
-    r = None
+def compute_depth(n, parents):
+    nodes = [TreeNode(i) for i in range(n)]
+    root = None
 
     for i, p in enumerate(parents):
         if p == -1:
-            r = uzs[i]
+            root = nodes[i]
         else:
-            uzs[p].children.append(uzs[i])
+            nodes[p].children.append(nodes[i])
 
-    if r is None:
+    if root is None:
         return 0
 
-    storage = [(r, 1)]
-    max_height = 0
-    while storage:
-        uz, height = storage.pop()
-        uz.height = height
-        max_height = max(max_height, height)
-        storage.extend([(child, height + 1) for child in uz.children])
+    stack = [(root, 1)]
+    max_depth = 0
+    while stack:
+        node, depth = stack.pop()
+        node.depth = depth
+        max_depth = max(max_depth, depth)
+        for child in node.children:
+            stack.append((child, depth + 1))
 
-    return max_height
+    return max_depth
 
-def main():
-    text = input()
-    if 'F' in text and not 'a' in text:
-        name = input()
-        file = "./test/" + name
-        with open(file) as f:
-            num = f.readline()
-            text = f.readline()
-    if 'I' in text:
-        num = input()
-        text = input()
-    print(compute_height(int(num), list(map(int, text.split()))))
+def parse_input(input_string):
+    input_lines = input_string.strip().split("\n")
+    n = int(input_lines[0])
+    parents = list(map(int, input_lines[1].split()))
+    return n, parents
 
-if __name__ == '__main__':
-    sys.setrecursionlimit(10**7)  
-    main()
+def solve(input_string):
+    n, parents = parse_input(input_string)
+    return str(compute_depth(n, parents))
+
+input_string = '7\n-1 0 0 1 1 2 2\n'
+print(solve(input_string))
