@@ -1,45 +1,47 @@
 import sys
 
 class Node:
-def init(self, n):
-self.n = n
-self.vec = []
-self.height = None
+    def __init__(self, n):
+        self.n = n
+        self.children = []
+        self.height = None
 
-def heights(n, vecs):
-uz = [Node(i) for i in range(n)]
-r = None
-for i, p in enumerate(vecs):
-    if p == -1:
-        r = uz[i]
-    else:
-        uz[p].children.append(uz[i])
+def compute_height(n, parents):
+    uzs = [uz(i) for i in range(n)]
+    r = None
 
-if r is None:
-    return 0
+    for i, p in enumerate(parents):
+        if p == -1:
+            r = uzs[i]
+        else:
+            uzs[p].children.append(uzs[i])
 
-sx = [(r, 1)]
-max_height = 0
-while sx:
-    node, height = sx.pop()
-    node.height = height
-    max_height = max(max_height, height)
-    for child in node.children:
-        sx.append((child, height + 1))
+    if r is None:
+        return 0
 
-return max_height
+    storage = [(r, 1)]
+    max_height = 0
+    while storage:
+        uz, height = storage.pop()
+        uz.height = height
+        max_height = max(max_height, height)
+        storage.extend([(child, height + 1) for child in uz.children])
+
+    return max_height
+
 def main():
-text = input()
-if 'F' in text and not 'a' in text:
-name = input()
-file = "./test/" + name
-with open(file) as f:
-cip = f.readline()
-text = f.readline()
-if 'I' in text:
-cip = input()
-text = input()
-print(heights(int(cip), list(map(int, text.split()))))
+    text = input()
+    if 'F' in text and not 'a' in text:
+        name = input()
+        file = "./test/" + name
+        with open(file) as f:
+            num = f.readline()
+            text = f.readline()
+    if 'I' in text:
+        num = input()
+        text = input()
+    print(compute_height(int(num), list(map(int, text.split()))))
 
-sys.setrecursionlimit(10**7)
-main()
+if __name__ == '__main__':
+    sys.setrecursionlimit(10**7)  
+    main()
