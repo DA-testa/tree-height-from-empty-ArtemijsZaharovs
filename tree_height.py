@@ -1,31 +1,43 @@
+#221RDC035, Artemijs Zaharovs, 18.gr.
 import sys
 import sys
 import numpy
 
-def max_chain_length(n, arr):
-    chains = [0] * n
-    for i in range(n):
-        if arr[i] == -1:
-            chains[i] = 1
-        elif chains[arr[i]] == 0:
-            chains[i] = max_chain_length(n, arr[arr[i]:]) + 1
-        else:
-            chains[i] = chains[arr[i]] + 1
-    return max(chains)
+def heights(num, vecs):
+    height = [0 for i in range(num)]
+    heig = 0
+    for i in range(num):
+        height = 0
+        p = i
+        while not (int(vecs[p]) == -1):
+            if (height[p] != 0):
+                height += height[p] 
+                break
+            height += 1
+            p = int(vecs[p])
+        height[i] = height
+        height = max(heig, height[i])
+    return heig + 1
 
 def main():
-    command = input().strip()
-    if command == "I":
-        n = int(input())
-        arr = [int(x) for x in input().split()]
-        print(max_chain_length(n, arr))
-    elif command == "F":
-        file_name = input().strip()
-        if "a" not in file_name:
-            with open("test/" + file_name) as f:
-                n = int(f.readline().strip())
-                arr = [int(x) for x in f.readline().split()]
-                print(max_chain_length(n, arr))
+    command = input()
+    if "F" in command:
+        file_name = input()
+        pa = "test/" + file_name
+        if not "a" in file_name:
+            with open(pa, "r") as f:
+                text = f.read()
+            partitioned = text.partition("\n")
+            num = int(partitioned[0])
+            r = partitioned[2].split(" ")
+            r = numpy.array(r)
+            print(heights(num, r))
+    elif "I" in command:
+        num = int(input())
+        vecs = input()
+        r = vecs.split(" ")
+        r = numpy.array(r)
+        print(heights(num, r))
 
 if __name__ == "__main__":
     main()
