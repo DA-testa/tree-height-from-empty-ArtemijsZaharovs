@@ -3,10 +3,10 @@ import sys
 import sys
 import numpy
 
-def heights(n, vecs):
+def heights(num, vecs):
     possible_heights = [0 for i in range(n)]
     max_height = 0
-     for i in range(n):
+    for i in range(num):
         height = 0
         p = i
         while not (int(vecs[p]) == -1):
@@ -28,16 +28,16 @@ def main():
             with open(path, "r") as f:
                 text = f.read()
             partitioned = text.partition("\n")
-            n = int(partitioned[0])
+            num = int(partitioned[0])
             r = partitioned[2].split(" ")
             r = numpy.array(r)
             print(heights(n, r))
     elif "I" in command:
-        n = int(input())
+        num = int(input())
         vecs = input()
         r = vecs.split(" ")
         r = numpy.array(r)
-        print(heights(n, r))
+        print(heights(num, r))
 
 if __name__ == "__main__":
     main()
