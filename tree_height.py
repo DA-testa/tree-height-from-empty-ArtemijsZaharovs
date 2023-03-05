@@ -17,7 +17,7 @@ def depths(n, vecs):
     if r is None:
         return 0
 
-    cx = [(r, 1)]
+    cx = [(r, 0)]  # start from depth 0
     max_depth = 0
     while cx:
         node, depth = cx.pop()
@@ -26,7 +26,7 @@ def depths(n, vecs):
         for child in node.children:
             cx.append((child, depth + 1))
 
-    return max_depth
+    return max_depth + 1  # add 1 to get the depth of the tree
 
 def parse_input(input_string):
     input_lines = input_string.strip().split("\n")
@@ -36,7 +36,8 @@ def parse_input(input_string):
 
 def solve(input_string):
     n, vecs = parse_input(input_string)
-    return str(depths(n, vecs)+1)
+    return str(depths(n, vecs))
 
-input_string = '7\n-1 0 0 1 1 2 2\n'
-print(solve(input_string)) # output: 4
+# example usage:
+input_string = '5\n4 -1 4 1 1\n'
+print(solve(input_string))
